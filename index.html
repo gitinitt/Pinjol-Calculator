@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PinjolSaku - Simulator Pinjaman Pintar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-100 py-4 px-6 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="bg-sky-500 text-white p-2 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </div>
+                <span class="text-lg font-extrabold tracking-tight">Pinjol<span class="text-sky-500">Saku</span></span>
+            </div>
+            <span class="text-xs bg-emerald-50 text-emerald-700 font-semibold px-2.5 py-1 rounded-full border border-emerald-100 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Edukasi Mandiri
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6 space-y-6">
+        
+        <!-- Info Alert -->
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl text-xs text-amber-800">
+            <strong>Tips Finansial:</strong> Batas aman cicilan bulanan adalah maksimal <strong>30%</strong> dari penghasilan bulanan Anda agar terhindar dari gagal bayar.
+        </div>
+
+        <!-- Grid Input & Hasil -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            
+            <!-- FORM INPUT (7 Kolom) -->
+            <section class="md:col-span-7 bg-white p-5 rounded-2xl border border-slate-100 space-y-5 shadow-sm">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Atur Parameter Pinjaman</h2>
+                
+                <!-- Input Jumlah Pinjaman -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <label class="font-bold text-slate-600">Jumlah Pinjaman (Rp)</label>
+                        <span id="disp-amount-formatted" class="font-mono font-bold text-sky-600">Rp 10.000.000</span>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-slate-400 text-sm font-bold">Rp</span>
+                        <input type="number" id="inp-amount" value="10000000" min="500000" max="100000000" step="100000" class="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none text-sm font-bold">
+                    </div>
+                    <input type="range" id="rng-amount" min="500000" max="100000000" step="500000" value="10000000" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                </div>
+
+                <!-- Input Bunga Per Bulan -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <label class="font-bold text-slate-600">Bunga Per Bulan (%)</label>
+                        <span class="font-mono font-bold text-rose-500"><span id="disp-interest">2.5</span>%</span>
+                    </div>
+                    <div class="relative">
+                        <input type="number" id="inp-interest" value="2.5" min="0.1" max="15" step="0.1" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none text-sm font-bold">
+                        <span class="absolute right-3 top-2.5 text-slate-400 text-sm font-bold">%</span>
+                    </div>
+                    <input type="range" id="rng-interest" min="0.1" max="15" step="0.1" value="2.5" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                </div>
+
+                <!-- Input Tenor (Bulan) -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <label class="font-bold text-slate-600">Tenor Pinjaman (Bulan)</label>
+                        <span class="font-mono font-bold text-slate-700"><span id="disp-tenor">12</span> Bulan</span>
+                    </div>
+                    <div class="relative">
+                        <input type="number" id="inp-tenor" value="12" min="1" max="36" step="1" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none text-sm font-bold">
+                        <span class="absolute right-3 top-2.5 text-slate-400 text-sm font-medium">Bulan</span>
+                    </div>
+                    <input type="range" id="rng-tenor" min="1" max="36" step="1" value="12" class="w-full h-1 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                </div>
+
+                <!-- Estimasi Kemampuan Bayar -->
+                <div class="pt-3 border-t border-slate-100 space-y-2">
+                    <label class="block text-xs font-bold text-slate-600">Pendapatan Bersih Bulanan Anda (Rp)</label>
+                    <input type="number" id="inp-income" value="5000000" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm font-medium focus:ring-1 focus:ring-indigo-500 focus:outline-none">
+                </div>
+            </section>
+
+            <!-- CARD HASIL & RINGKASAN (5 Kolom) -->
+            <section class="md:col-span-5 space-y-4">
+                
+                <!-- Box Pembayaran Bulanan -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden text-center">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-sky-500"></div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Angsuran Bulanan</span>
+                    <h3 id="res-monthly" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">Rp 0</h3>
+                    
+                    <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-100 text-left text-xs">
+                        <div>
+                            <span class="text-slate-400 block">Pokok Pinjaman</span>
+                            <span id="res-principal" class="font-bold text-slate-700">Rp 0</span>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 block">Total Bunga</span>
+                            <span id="res-total-interest" class="font-bold text-rose-500">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-2.5 bg-slate-50 rounded-lg flex justify-between items-center text-xs">
+                        <span class="font-medium text-slate-500">Total Pengembalian:</span>
+                        <span id="res-total-pay" class="font-extrabold text-sky-600">Rp 0</span>
+                    </div>
+                </div>
+
+                <!-- Visual Bar Proporsi (Pengganti Chart.js) -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                    <span class="text-xs font-bold text-slate-600 block">Proporsi Pengembalian Dana</span>
+                    <div class="h-4 w-full bg-slate-100 rounded-full overflow-hidden flex">
+                        <div id="bar-principal" class="h-full bg-sky-500 transition-all duration-300" style="width: 70%"></div>
+                        <div id="bar-interest" class="h-full bg-rose-500 transition-all duration-300" style="width: 30%"></div>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-bold">
+                        <span class="text-sky-600 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-sky-500"></span> Pokok (<span id="pct-principal">70%</span>)</span>
+                        <span class="text-rose-500 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span> Bunga (<span id="pct-interest">30%</span>)</span>
+                    </div>
+                </div>
+
+                <!-- Indikator Kelayakan Finansial -->
+                <div id="risk-box" class="p-4 rounded-2xl border transition-all duration-300 flex flex-col justify-between text-xs space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">Analisis Beban Cicilan</span>
+                        <span id="risk-ratio" class="font-mono font-bold">0% DTI</span>
+                    </div>
+                    <p id="risk-tip" class="text-[11px] leading-normal text-slate-600"></p>
+                </div>
+
+            </section>
+        </div>
+
+        <!-- Tabel Jadwal Sederhana -->
+        <section class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+            <h3 class="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">Jadwal Rencana Pembayaran</h3>
+            <div class="overflow-x-auto max-h-60 overflow-y-auto">
+                <table class="min-w-full divide-y divide-slate-100 text-xs">
+                    <thead class="bg-slate-50 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-2 text-left font-bold text-slate-500">Bulan</th>
+                            <th class="px-4 py-2 text-left font-bold text-slate-500">Cicilan Pokok</th>
+                            <th class="px-4 py-2 text-left font-bold text-slate-500">Cicilan Bunga</th>
+                            <th class="px-4 py-2 text-left font-bold text-slate-500">Total Tagihan</th>
+                            <th class="px-4 py-2 text-left font-bold text-slate-500">Sisa Pinjaman</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl-body" class="divide-y divide-slate-100 text-slate-600">
+                        <!-- Diisi Dinamis -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-100 py-4 text-center text-[11px] text-slate-400">
+        &copy; 2026 PinjolSaku - Gunakan pinjaman online dengan bijak dan pilihlah yang terdaftar resmi.
+    </footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+
+        // Inputs
+        const inpAmt = $('inp-amount'), rngAmt = $('rng-amount');
+        const inpInt = $('inp-interest'), rngInt = $('rng-interest');
+        const inpTen = $('inp-tenor'), rngTen = $('rng-tenor');
+        const inpInc = $('inp-income');
+
+        // Formatter Helper
+        const formatIDR = num => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
+
+        // Bi-directional binding function
+        function syncInput(input, range, onUpdate) {
+            input.addEventListener('input', () => {
+                let val = parseFloat(input.value) || 0;
+                if (val < range.min) val = range.min;
+                if (val > range.max) val = range.max;
+                range.value = val;
+                onUpdate();
+            });
+            range.addEventListener('input', () => {
+                input.value = range.value;
+                onUpdate();
+            });
+        }
+
+        // Jalankan sinkronisasi
+        syncInput(inpAmt, rngAmt, updateCalc);
+        syncInput(inpInt, rngInt, updateCalc);
+        syncInput(inpTen, rngTen, updateCalc);
+        inpInc.addEventListener('input', updateCalc);
+
+        function updateCalc() {
+            const principal = parseFloat(inpAmt.value) || 0;
+            const interestPercent = parseFloat(inpInt.value) || 0;
+            const tenor = parseInt(inpTen.value) || 1;
+            const income = parseFloat(inpInc.value) || 0;
+
+            // Update Label Tampilan
+            $('disp-amount-formatted').textContent = formatIDR(principal);
+            $('disp-interest').textContent = interestPercent.toFixed(1);
+            $('disp-tenor').textContent = tenor;
+
+            // Kalkulasi Bunga Flat
+            const monthlyInterest = principal * (interestPercent / 100);
+            const totalInterest = monthlyInterest * tenor;
+            const totalRepayment = principal + totalInterest;
+            const monthlyPayment = totalRepayment / tenor;
+
+            // Update Output Angka
+            $('res-monthly').textContent = formatIDR(monthlyPayment);
+            $('res-principal').textContent = formatIDR(principal);
+            $('res-total-interest').textContent = formatIDR(totalInterest);
+            $('res-total-pay').textContent = formatIDR(totalRepayment);
+
+            // Update Visual Bar Proporsi
+            const pctPrincipal = Math.round((principal / totalRepayment) * 100) || 0;
+            const pctInterest = 100 - pctPrincipal;
+            $('bar-principal').style.width = pctPrincipal + '%';
+            $('bar-interest').style.width = pctInterest + '%';
+            $('pct-principal').textContent = pctPrincipal + '%';
+            $('pct-interest').textContent = pctInterest + '%';
+
+            // Evaluasi Kelayakan Beban Finansial (DTI)
+            const dti = income > 0 ? (monthlyPayment / income) * 100 : 0;
+            $('risk-ratio').textContent = dti.toFixed(1) + '% DTI';
+            
+            const rBox = $('risk-box');
+            const rTip = $('risk-tip');
+            
+            if (income <= 0) {
+                rBox.className = "p-4 rounded-2xl border border-slate-200 bg-slate-50 text-slate-500 text-xs space-y-2";
+                rTip.textContent = "Masukkan pendapatan bulanan Anda untuk menguji kelayakan cicilan.";
+            } else if (dti <= 30) {
+                rBox.className = "p-4 rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-800 text-xs space-y-2";
+                rTip.textContent = "Sangat Aman! Cicilan berada di bawah batas maksimal 30% dari penghasilan bulanan Anda.";
+            } else if (dti <= 45) {
+                rBox.className = "p-4 rounded-2xl border border-amber-100 bg-amber-50 text-amber-800 text-xs space-y-2";
+                rTip.textContent = "Batas Rawan! Pengeluaran utang Anda cukup tinggi, disarankan memotong anggaran kebutuhan non-esensial.";
+            } else {
+                rBox.className = "p-4 rounded-2xl border border-rose-100 bg-rose-50 text-rose-800 text-xs space-y-2";
+                rTip.textContent = "Bahaya! Cicilan melebihi setengah dari pendapatan bulanan Anda. Potensi gagal bayar sangat tinggi.";
+            }
+
+            // Render Amortization Table Sederhana
+            const tblBody = $('tbl-body');
+            tblBody.innerHTML = '';
+            const monthlyPrincipal = principal / tenor;
+            let remaining = principal;
+
+            for (let i = 1; i <= tenor; i++) {
+                remaining -= monthlyPrincipal;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="px-4 py-2 font-bold">Bulan ${i}</td>
+                    <td class="px-4 py-2">${formatIDR(monthlyPrincipal)}</td>
+                    <td class="px-4 py-2 text-rose-500">${formatIDR(monthlyInterest)}</td>
+                    <td class="px-4 py-2 font-bold text-slate-800">${formatIDR(monthlyPayment)}</td>
+                    <td class="px-4 py-2 font-mono text-slate-400">${formatIDR(Math.max(0, remaining))}</td>
+                `;
+                tblBody.appendChild(tr);
+            }
+        }
+
+        // Jalankan Kalkulasi Pertama Kali
+        window.onload = updateCalc;
+    </script>
+</body>
+</html>
+                                
